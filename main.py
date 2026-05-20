@@ -4,4 +4,4 @@ main_menu = input("Please choose your option below list by a number \n[1: View L
 
 user_choice = True
 while user_choice == 5:
-    print("Wrong choice. Try again.")
+    print("This is while")
