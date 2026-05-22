@@ -1,7 +1,12 @@
 print("Welcome to a New To-do list!")
-main_menu = input("Please choose your option below list by a number \n[1: View Lists, 2: Add Task, 3: Remove a Task, 4: Mark Complete, 5: Exit]\n:  ")
-#This line 1~2 are main menu. Users will choose their option from the list.
 
-user_choice = True
-while user_choice == 5:
-    print("This is while")
+options = [1,2,3,4,5] 
+while True:
+    print()#This print function creates a blank line that might help clear reading for users.
+    print("[1: View Lists, 2: Add Task, 3: Remove a Task, 4: Mark Complete, 5: Exit]")#This line is main menu options. Users will choose their option from the list.
+    user_input = int(input("Please choose your option from the list above by a number \n: "))
+    if user_input in options:
+        
+        break
+    else:
+        print("Your option isn't available. Please try again.")
