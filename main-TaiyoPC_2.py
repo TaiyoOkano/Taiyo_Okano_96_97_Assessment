@@ -1,6 +1,6 @@
 print("Welcome to a New To-do list!")
 
-tasks = []#This is an empty list that will be used to store the tasks that users add to their to-do list. 
+tasks = []#This is an empty list that will be used to store the tasks that users add to their to-do list.
 def View_Lists():
     print("Here is your current to-do list.")
     print(f"{tasks}")
@@ -30,7 +30,6 @@ while True:
         user_input = int(input("Please choose your option from the list above by a number \n: "))
         if user_input in options:
             if user_input == 1:
-<<<<<<< HEAD
                 View_Lists()
             elif user_input == 2:
                 Add_Task()
@@ -40,17 +39,6 @@ while True:
                 Mark_Complete()
             elif user_input == 5:
                 print("Goodbye.")
-=======
-                print("Viewing lists (not implemented yet).")
-            elif user_input == 2:
-                print("Add Task (not implemented yet).")
-            elif user_input == 3:
-                print("Remove a Task (not implemented yet).")
-            elif user_input == 4:
-                print("Mark Complete (not implemented yet).")
-            elif user_input == 5:
-                print("Exiting. Goodbye!")
->>>>>>> 43dda908468e1a2044e6baf8fa58dea52ca882e2
                 break
         else:
             print("Your option isn't available. Please try again.")
