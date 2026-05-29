@@ -8,7 +8,7 @@ def View_Lists():
 def Add_Task():
     print("Add Task.")
     while True:
-        new_task = input("Enter a task you want to add: ").strip()
+        new_task = input("Enter a task you want to add: ").strip().lower()
         if new_task == "":
             print("Your task cannot be empty or just spaces. Please try again.")
         else:
@@ -16,12 +16,14 @@ def Add_Task():
             print(f"Your task '{new_task}' has been added.")
             break
 
-
 def Remove_Task():
     print("Remove a Task.")
-    del_task = input("Enter a task you want to remove: ")
-    tasks.remove(del_task)
-    print(f"Your task '{del_task}' has been removed.")
+    del_task = input("Enter a task you want to remove: ").strip().lower()
+    if del_task in tasks:
+        tasks.remove(del_task)
+        print(f"Your task '{del_task}' has been removed.")
+    else:
+        print(f"Task '{del_task}' not found in the list.")
 
 def Mark_Complete():
     print("Mark Complete (not implemented yet).")
