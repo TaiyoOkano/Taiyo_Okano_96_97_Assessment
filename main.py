@@ -1,3 +1,4 @@
+import json
 print("Welcome to a New To-do list!")
 
 tasks = []#This is an empty list that will be used to store the tasks that users add to their to-do list.
@@ -11,6 +12,8 @@ def Add_Task():
         new_task = input("Enter a task you want to add: ").strip().lower()
         if new_task == "":
             print("Your task cannot be empty or just spaces. Please try again.")
+        elif new_task in tasks:#This elif line prevents to save same name tasks.  
+            print(f"!Your task '{new_task}' has already been added to the list!\nPlease try again.")
         else:
             tasks.append(new_task)
             print(f"Your task '{new_task}' has been added.")
@@ -22,12 +25,22 @@ def Remove_Task():
     if del_task in tasks:
         tasks.remove(del_task)
         print(f"Your task '{del_task}' has been removed.")
+    elif del_task + "(Complete)" in tasks:
+        tasks.remove(del_task + "(Complete)")
+        print(f"Your task '{del_task}' has been removed.")
     else:
         print(f"Task '{del_task}' not found in the list.")
 
-def Mark_Complete():
-    print("Mark Complete (not implemented yet).")
-
+def Mark_Complete():#String Concatenation
+    print("Mark Complete.")
+    comp_task = input("Enter a task you want to mark as complete: ").strip().lower()
+    if comp_task in tasks:
+        complete_task = comp_task + "(Complete)"
+        tasks.remove(comp_task)
+        tasks.append(complete_task)
+        print(f"Your task '{comp_task}' has been marked as complete.")
+    else:
+        print(f"Task '{comp_task}' not found in the list.")
 
 options = [1,2,3,4,5] 
 while True:
