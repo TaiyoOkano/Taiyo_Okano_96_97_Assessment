@@ -1,7 +1,27 @@
 import json
-print("Welcome to a New To-do list!")
+print("Welcome to a New To-do list!\n")
 
 tasks = []#This is an empty list that will be used to store the tasks that users add to their to-do list.
+
+def save_tasks():#This function serialize the list.
+    with open("saved_tasks.json", "w") as f:
+        print("Saving your tasks...")
+        json.dump(tasks, f)
+
+def load_tasks():#This function deserialize the list.
+    try:
+        global tasks
+        with open("saved_tasks.json", "r") as f:
+            tasks = json.load(f)
+            if tasks == []:
+                print("Start with a new To-Do list.")
+            else:
+                print("Start with your previous tasks.")
+    except FileNotFoundError:
+        print("No saved tasks found. Start with a new To-Do list.")
+        
+load_tasks()
+
 def View_Lists():
     print("Here is your current to-do list.")
     print(f"{tasks}")
@@ -45,7 +65,6 @@ def Mark_Complete():#String Concatenation
 options = [1,2,3,4,5] 
 while True:
     try:
-
         print("\n")#This print function creates a blank line that might help clear reading for users.
         print("[1: View Lists, 2: Add Task, 3: Remove a Task, 4: Mark Complete, 5: Exit]")#This line is main menu options. Users will choose their option from the list.
         user_input = int(input("Please choose your option from the list above by a number \n: "))
@@ -59,6 +78,7 @@ while True:
             elif user_input == 4:
                 Mark_Complete()
             elif user_input == 5:
+                save_tasks()
                 print("Goodbye.")
                 break
         else:
