@@ -1,20 +1,19 @@
 import json
 print("Welcome to a New To-do list!\n")
 
-tasks = {}#This is an empty dictionary that will be used to store the tasks that users add to their to-do list.
+tasks = []#This is an empty list that will be used to store the tasks that users add to their to-do list.
 
-
-def save_tasks():#This function serialize the dictionary.
+def save_tasks():#This function serialize the list.
     with open("saved_tasks.json", "w") as f:
         print("Saving your tasks...")
         json.dump(tasks, f)
 
-def load_tasks():#This function deserialize the dictionary.
+def load_tasks():#This function deserialize the list.
     try:
         global tasks
         with open("saved_tasks.json", "r") as f:
             tasks = json.load(f)
-            if tasks == {}:
+            if tasks == []:
                 print("Start with a new To-Do list.")
             else:
                 print("Start with your previous tasks.")
@@ -25,40 +24,19 @@ load_tasks()
 
 def View_Lists():
     print("Here is your current to-do list.")
-    print("---Current To-Do List---")
-    if not tasks:
-        print("Your list is empty.")
-    else:
-        for category, task_list in tasks.items():
-            print(f"[{category.upper()}]")
-            for task in task_list:
-                print(f"{task}")
+    print(f"{tasks}")
 
 def Add_Task():
     print("Add Task.")
-    category = input("Enter a category (e.g. work, personal)\n: ").strip().lower()
-    if category == "":
-        print("Category cannot be empty or just spaces.")
-        return
-    
     while True:
         new_task = input("Enter a task you want to add: ").strip().lower()
         if new_task == "":
             print("Your task cannot be empty or just spaces. Please try again.")
-
-        #This elif statement is for if category doesn't exist in tasks, it creates a new list.
-        elif category not in tasks:
-            tasks[category] = []
-            
-        #This elif prevents to save same name category.
-        elif new_task in tasks[category]:
-            print(f"!Your task '{new_task}' already exists in [{category}!\nPlease try again.]")
-
         elif new_task in tasks:#This elif line prevents to save same name tasks.  
             print(f"!Your task '{new_task}' has already been added to the list!\nPlease try again.")
         else:
-            tasks[category].append(new_task)
-            print(f"Your task '{new_task}' has been added to [{category}].")
+            tasks.append(new_task)
+            print(f"Your task '{new_task}' has been added.")
             break
 
 def Remove_Task():
