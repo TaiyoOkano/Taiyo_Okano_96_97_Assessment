@@ -3,14 +3,13 @@ print("Welcome to a New To-do list!\n")
 
 tasks = {}#This is an empty dictionary that will be used to store the tasks that users add to their to-do list.
 
-
 def save_tasks():#This function serialize the dictionary.
     with open("saved_tasks.json", "w") as f:
         print("Saving your tasks...")
         json.dump(tasks, f)
 
 def load_tasks():#This function deserialize the dictionary.
-    try:
+    try:#This try-except block would create a new To-Do list if there is no saved_tasks.json file.
         global tasks
         with open("saved_tasks.json", "r") as f:
             tasks = json.load(f)
@@ -23,21 +22,20 @@ def load_tasks():#This function deserialize the dictionary.
         
 load_tasks()
 
-def View_Lists():
-    print("Here is your current to-do list.")
+def View_Lists():#This function is for users to view thier current To-Do list.
     print("---Current To-Do List---")
     if not tasks:
         print("Your list is empty.")
-    else:
+    else:#This for loop is for printing the category and tasks in the list.
         for category, task_list in tasks.items():
-            print(f"[{category.upper()}]")
+            print(f"[{category.lower()}]")
             for task in task_list:
                 print(f"{task}")
 
-def Add_Task():
+def Add_Task():#This function is for users to add a task to thier To-Do list.
     print("Add Task.")
     category = input("Enter a category (e.g. work, personal)\n: ").strip().lower()
-    if category == "":
+    if category == "":#This if statement is for if category is empty or just spaces.
         print("Category cannot be empty or just spaces.")
         return
     
@@ -45,48 +43,58 @@ def Add_Task():
         new_task = input("Enter a task you want to add: ").strip().lower()
         if new_task == "":
             print("Your task cannot be empty or just spaces. Please try again.")
+        else:  
+            #This if statement is for if category doesn't exist in tasks, it creates a new list.
+            if category not in tasks:
+                tasks[category] = []            
+            #This if prevents to save same name category.
+            if new_task in tasks[category]:
+                print(f"!Your task '{new_task}' already exists in [{category}]!\nPlease try again.")
+            else:
+                tasks[category].append(new_task)
+                print(f"Your task '{new_task}' has been added to [{category}].")
+                break
 
-        #This elif statement is for if category doesn't exist in tasks, it creates a new list.
-        elif category not in tasks:
-            tasks[category] = []
-            
-        #This elif prevents to save same name category.
-        elif new_task in tasks[category]:
-            print(f"!Your task '{new_task}' already exists in [{category}!\nPlease try again.]")
-
-        elif new_task in tasks:#This elif line prevents to save same name tasks.  
-            print(f"!Your task '{new_task}' has already been added to the list!\nPlease try again.")
-        else:
-            tasks[category].append(new_task)
-            print(f"Your task '{new_task}' has been added to [{category}].")
-            break
-
-def Remove_Task():
+def Remove_Task():#This function is for users to remove a task from thier To-Do list.
     print("Remove a Task.")
+    category = input("Enter the category of the task you want to remove\n: ").strip().lower()
+    if category not in tasks:
+        print(f"Your category [{category}] doesn't exist. Please try again.")
+        return
+    
     del_task = input("Enter a task you want to remove: ").strip().lower()
-    if del_task in tasks:
-        tasks.remove(del_task)
-        print(f"Your task '{del_task}' has been removed.")
-    elif del_task + "(Complete)" in tasks:
-        tasks.remove(del_task + "(Complete)")
-        print(f"Your task '{del_task}' has been removed.")
+    #Those if statements are for if the task is in the list, it will be removed. 
+    #If the task with "(Complete)" is in the list, it will also be removed. 
+    #If neither of them is in the list, it will print a message that the task is not found.
+    if del_task in tasks[category]:
+        tasks[category].remove(del_task)
+        print(f"Your task '{del_task}' has been removed from [{category}].")
+    elif del_task + "(Complete)" in tasks[category]:
+        tasks[category].remove(del_task + "(Complete)")
+        print(f"Your task '{del_task}' has been removed from [{category}].")
     else:
-        print(f"Task '{del_task}' not found in the list.")
+        print(f"Task '{del_task}' not found in [{category}].")
 
-def Mark_Complete():#String Concatenation
+def Mark_Complete():#This function is for users to mark a task as complete in their To-Do list.
     print("Mark Complete.")
+    category = input("Enter the category of the task you want to mark as complete\n: ").strip().lower()
+    if category not in tasks:
+        print(f"Your category [{category}] doesn't exist. Please try again.")
+        return
+    
     comp_task = input("Enter a task you want to mark as complete: ").strip().lower()
-    if comp_task in tasks:
+    #If the task is in the list, it will add "(Complete)" to the end of the task.
+    if comp_task in tasks[category]:
         complete_task = comp_task + "(Complete)"
-        tasks.remove(comp_task)
-        tasks.append(complete_task)
-        print(f"Your task '{comp_task}' has been marked as complete.")
+        tasks[category].remove(comp_task)
+        tasks[category].append(complete_task)
+        print(f"Your task '{comp_task}' has been marked as complete in [{category}].")
     else:
-        print(f"Task '{comp_task}' not found in the list.")
+        print(f"Task '{comp_task}' not found in [{category}].")
 
 options = [1,2,3,4,5] 
-while True:
-    try:
+while True:#This while loop is for the main menu. It will keep running until users choose to exit the program by entering 5.
+    try:#This try-except block prevents the program from crashing when users enter invalid input.
         print("\n")#This print function creates a blank line that might help clear reading for users.
         print("[1: View Lists, 2: Add Task, 3: Remove a Task, 4: Mark Complete, 5: Exit]")#This line is main menu options. Users will choose their option from the list.
         user_input = int(input("Please choose your option from the list above by a number \n: "))
