@@ -113,21 +113,43 @@ def Remove_Task(category, task_index):
         
 def Mark_Complete():#This function is for users to mark a task as complete in their To-Do list.
     print("Mark Complete.")
-    View_Lists()
-    category = input("Enter the category of the task you want to mark as complete\n: ").strip().lower()
-    if category not in tasks:
-        print(f"Your category [{category}] doesn't exist. Please try again.")
-        return
-    
-    comp_task = input("Enter a task you want to mark as complete: ").strip().lower()
-    #If the task is in the list, it will add "(Complete)" to the end of the task.
-    if comp_task in tasks[category]:
-        complete_task = comp_task + "(Complete)"
-        tasks[category].remove(comp_task)
-        tasks[category].append(complete_task)
-        print(f"Your task '{comp_task}' has been marked as complete in [{category}].")
+    while True:      
+        try:#This try-except block prevents the program from crashing when users enter invalid input.
+            View_Lists()
+            category = input("Enter the category of the task you want to mark as complete\n: ").strip().lower()
+            if category not in tasks:
+                print(f"Your category [{category}] doesn't exist. Please try again.")
+                continue
+
+            for i, task in enumerate(tasks[category]):
+                print(f"{i + 1}: {task}")
+
+            task_num = int(input("Enter the number of the task you want to mark as complete\n: "))
+            task_index = task_num - 1
+            success = Mark_Task_Complete(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
+
+            if success == True:
+                print("Your task has been marked as complete.")
+                View_Lists()
+
+            elif success == "already_complete":
+                print("Your task is already marked as complete. Please try again.\n")
+
+            else:
+                print("Invalid task number. Please try again.\n")
+            break
+        except ValueError:
+            print("Invalid input. Please enter a number.\n") 
+
+def Mark_Task_Complete(category, comp_task):
+    if 0 <= comp_task < len(tasks[category]):
+        if "(Complete)" in tasks[category][comp_task]:
+            return "already_complete"
+        complete_task = tasks[category][comp_task] + "(Complete)"
+        tasks[category][comp_task] = complete_task
+        return True
     else:
-        print(f"Task '{comp_task}' not found in [{category}].")
+        return False
 
 options = [1,2,3,4,5] 
 while True:#This while loop is for the main menu. It will keep running until users choose to exit the program by entering 5.
