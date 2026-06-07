@@ -32,30 +32,18 @@ def View_Lists():#This function is for users to view thier current To-Do list.
             for task in task_list:
                 print(f"{task}")
 
-def Add_Task():#This function is for users to add a task to thier To-Do list.
+def Add_Task(category, new_task):#This function is for users to add a task to thier To-Do list.
     print("Add Task.")
-    View_Lists()
-    category = input("Enter a category (e.g. work, personal)\n: ").strip().lower()
-    if category == "":#This if statement is for if category is empty or just spaces.
-        print("Category cannot be empty or just spaces. Please try again.")
-        return
-    
-    while True:
-        new_task = input("Enter a task you want to add: ").strip().lower()
-        if new_task == "":
-            print("Your task cannot be empty or just spaces. Please try again.")
-        else:  
-            #This if statement is for if category doesn't exist in tasks, it creates a new list.
-            if category not in tasks:
-                tasks[category] = []            
-            #This if prevents to save same name category.
-            if new_task in tasks[category]:
-                print(f"!Your task '{new_task}' already exists in [{category}]!\nPlease try again.")
-            else:
-                tasks[category].append(new_task)
-                print(f"Your task '{new_task}' has been added to [{category}].")
-                View_Lists()
-                break
+
+    if category not in tasks:
+        tasks[category] = []     
+
+    if new_task in tasks[category]:
+        return False
+    else:
+        tasks[category].append(new_task)
+        return True
+
 
 def Remove_List():#This function is for users to remove a task from thier To-Do list.
     print("Remove a List.")
@@ -134,7 +122,30 @@ while True:#This while loop is for the main menu. It will keep running until use
             if user_input == 1:
                 View_Lists()
             elif user_input == 2:
-                Add_Task()
+                View_Lists()
+        
+                category = input("Enter a category (e.g. work, personal)\n: ").strip().lower()
+                if category == "":#This if statement is for if category is empty or just spaces.
+                    print("Category cannot be empty or just spaces. Please try again.")
+                    continue
+
+                while True:#This while loop is for if the category is valid, it will keep asking users to enter a task until they enter a valid task that can be added to the list.
+                    new_task = input("Enter a task you want to add: ").strip().lower()
+                    if new_task == "":
+                        print("Your task cannot be empty or just spaces. Please try again.")
+                        continue
+
+                    success = Add_Task(category, new_task)
+                    if success == True:
+                        print(f"Your task '{new_task}' has been added to [{category}].")
+                        View_Lists()
+                        break
+                    else:
+                        print(f"!Your task '{new_task}' already exists in [{category}]!\nPlease try again.")
+                        
+                        
+                        
+
             elif user_input == 3:
                 Remove_List()
             elif user_input == 4:
@@ -145,5 +156,7 @@ while True:#This while loop is for the main menu. It will keep running until use
                 break
         else:
             print("Your option isn't available. Please try again.")
-    except ValueError:
+    except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
         print("Invalid input. Please enter a number.\n")
+    except EOFError:#This except block prevents the program from EOFError(e.g. Ctrl+D or Ctrl+Z).
+        print("Invalid input. Please try again.\n")
