@@ -49,12 +49,42 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
     print("Remove a List.")
     while True:      
         try:#This try-except block prevents the program from crashing when users enter invalid input.
-            del_ask = int(input("Do you want to remove a category or a task? Enter by 1 or 2 [1: Category, 2: Task]\n: "))
+            del_ask = int(input("Do you want to remove a category or a task? Or clear all lists? Enter by 1, 2, or 3. \n[1: Category, 2: Task, 3: Clear All Lists]\n: "))
             if del_ask == 1:
-                Remove_Category()
-                break        
+                View_Lists()
+                category_name = input("Enter the category you want to remove\n: ").strip().lower()
+
+                success = Remove_Category(category_name)#This line calls the Remove_Category function and receives boolean.
+                if success == True:
+                    print(f"Your category [{category_name}] has been removed.")
+                    View_Lists()
+                else:
+                    print(f"Your category [{category_name}] doesn't exist. Please try again.\n")
+                break
+    
             elif del_ask == 2:
-                Remove_Task()
+                View_Lists()
+                category = input("Enter the category of the task you want to remove\n: ").strip().lower()
+                if category not in tasks:
+                    print(f"Your category [{category}] doesn't exist. Please try again.")
+                    continue
+
+                for i, task in enumerate(tasks[category]):
+                    print(f"{i + 1}: {task}")
+
+                task_num = int(input("Enter the number of the task you want to remove\n: "))
+                task_index = task_num - 1
+                success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
+
+                if success == True:
+                    print("Your task has been removed.")
+                    View_Lists()
+                else:
+                    print("Invalid task number. Please try again.\n")
+                break
+            elif del_ask == 3:
+                tasks.clear()
+                print("All your lists have been cleared.")
                 break
             else:
                 print("Your option isn't available. Please try again.")
@@ -62,36 +92,23 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
             print("Invalid input. Please enter a number.\n")
 
 
-def Remove_Category():  
-    View_Lists() 
-    del_category = input("Enter the category you want to remove\n: ").strip().lower()
-    if del_category in tasks:
-        del tasks[del_category]
-        print(f"Your category [{del_category}] has been removed.")
+def Remove_Category(category_name):  
+    if category_name in tasks:
+        del tasks[category_name]
+        return True
+    
     else:
-        print(f"Your category [{del_category}] doesn't exist. Please try again.\n")
-        
+        return False
+
         
 
-def Remove_Task():
-    View_Lists()
-    category = input("Enter the category of the task you want to remove\n: ").strip().lower()
-    if category not in tasks:
-        print(f"Your category [{category}] doesn't exist. Please try again.")
-        return
+def Remove_Task(category, task_index):
+    if 0 <= task_index < len(tasks[category]):
+        del tasks[category][task_index]
+        return True
+        
     else:
-        del_task = input("Enter a task you want to remove: ").strip().lower()
-        #Those if statements are for if the task is in the list, it will be removed. 
-        #If the task with "(Complete)" is in the list, it will also be removed. 
-        #If neither of them is in the list, it will print a message that the task is not found.
-        if del_task in tasks[category]:
-            tasks[category].remove(del_task)
-            print(f"Your task '{del_task}' has been removed from [{category}].")
-        elif del_task + "(Complete)" in tasks[category]:
-            tasks[category].remove(del_task + "(Complete)")
-            print(f"Your task '{del_task}' has been removed from [{category}].")
-        else:
-            print(f"Task '{del_task}' not found in [{category}].")
+        return False
 
         
 def Mark_Complete():#This function is for users to mark a task as complete in their To-Do list.
