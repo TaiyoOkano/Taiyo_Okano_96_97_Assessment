@@ -22,18 +22,55 @@ def load_tasks():#This function deserialize the dictionary.
         
 load_tasks()#This calls the load_tasks function to load from the saved_tasks.json file.
 
+def get_input(question):
+    while True:
+        user_input = input(f"{question} (or '0' to go back)\n:").strip().lower()
+        if user_input == "0":
+            return None
+
+        if user_input == "":#This if prevents blank input.
+            print("Input cannot be blank. Please try again.")
+            continue
+
+        return user_input
+
+
 def View_Lists():#This function is for users to view thier current To-Do list.
                  #It will automatically display the current list after users add, remove, or mark complete a task. 
     print("---Current To-Do List---")
     if not tasks:
         print("Your list is empty.")
-    else:#This for loop is for printing the category and tasks in the list.
+    else:#This for is for printing the category and tasks in the list.
         for category, task_list in tasks.items():
             print(f"[{category.lower()}]")
             for task in task_list:
                 print(f"{task}")
 
-def Add_Task(category, new_task):#This function is for users to add a task to thier To-Do list.
+
+def Add_Task():
+    while True:
+        View_Lists()
+            
+        category = get_input("Enter a category (e.g. work, personal)")
+
+        if not category: return
+
+        #This while loop is for if the category is valid, it will keep asking users to enter a task until they enter a valid task that can be added to the list.
+        while True:
+            new_task = get_input("Enter a task you want to add: ")
+
+            if not new_task: return
+
+            success = Add_Task_Para(category, new_task)#This line calls the Add_Task function with parameters.
+            if success == True:
+                print(f"Your task '{new_task}' has been added to [{category}].")#This line is for if the task is successfully added to the list.
+                View_Lists()
+                break
+            else:#This else is for if the task already exists in the same category.
+                print(f"!Your task '{new_task}' already exists in [{category}]!\nPlease try again.")
+
+
+def Add_Task_Para(category, new_task):#This function is for users to add a task to thier To-Do list.
     print("Add Task.")
     #This if statement is for if the category doesn't exist, it will create a new category.
     if category not in tasks:
@@ -51,11 +88,16 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
     while True:      
         try:#This try-except block prevents the program from crashing when users enter invalid input.
             #This line asks remove options for users.
-            del_ask = int(input("Do you want to remove a category or a task? Or clear all lists? Enter by 1, 2, or 3. \n[1: Category, 2: Task, 3: Clear All Lists]\n: "))
+            del_ask = int(get_input("Do you want to remove a category or a task? Or clear all lists? Enter by 1, 2, or 3. \n[1: Category, 2: Task, 3: Clear All Lists]"))
+
+            if not del_ask: return
+
             if del_ask == 1:#This if statement is for users to remove a category from the list.
                 View_Lists()
                 #This line asks users to enter the name of the category.
-                category_name = input("Enter the category you want to remove\n: ").strip().lower()
+                category_name = get_input("Enter the category you want to remove.")
+
+                if not category_name: return
 
                 success = Remove_Category(category_name)#This line calls the Remove_Category function and receives boolean.
                 if success == True:#This if is for if the category is successfully removed.
@@ -63,12 +105,15 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                     View_Lists()
                 else:#This else is for if the category doesn't exist.
                     print(f"Your category [{category_name}] doesn't exist. Please try again.\n")
-                break
+                    continue
     
             elif del_ask == 2:#This elif statement is for users to remove a task from the list.
                 View_Lists()
                 #This line asks users to enter the category of the task.
-                category = input("Enter the category of the task you want to remove\n: ").strip().lower()
+                category = get_input("Enter the category of the task you want to remove.")
+
+                if not category: return
+
                 if category not in tasks:
                     print(f"Your category [{category}] doesn't exist. Please try again.")
                     continue
@@ -78,7 +123,10 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                     print(f"{i + 1}: {task}")
 
                 #This line asks users to enter the number of the task.
-                task_num = int(input("Enter the number of the task you want to remove\n: "))
+                task_num = int(get_input("Enter the number of the task you want to remove."))
+
+                if not task_num: return
+
                 task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
                 success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
 
@@ -96,17 +144,19 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                 print("Your option isn't available. Please try again.")
         except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
             print("Invalid input. Please enter a number.\n")
+        except TypeError:
+            return
+        
+
 
 
 def Remove_Category(category_name):#This function is for users to remove a category from their To-Do list.
     if category_name in tasks:#This if checks if the category exists in the tasks dictionary.
         del tasks[category_name]
         return True
-    
+
     else:#This else is for if the category doesn't exist.
         return False
-
-        
 
 def Remove_Task(category, task_index):#This function is for users to remove a task from their To-Do list by category and task index.
     if 0 <= task_index < len(tasks[category]):#This if checks if the task index is valid for the given category.
@@ -123,7 +173,10 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
         try:#This try-except block prevents the program from crashing when users enter invalid input.
             View_Lists()
             #This line asks users to enter the category of the task.
-            category = input("Enter the category of the task you want to mark as complete\n: ").strip().lower()
+            category = get_input("Enter the category of the task you want to mark as complete.")
+
+            if not category: return
+
             if category not in tasks:#This if is for if the category doesn't exist in the tasks dictionary.
                 print(f"Your category [{category}] doesn't exist. Please try again.")
                 continue
@@ -133,9 +186,12 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
                 print(f"{i + 1}: {task}")
 
             #This line asks users to enter the number of the task they want to mark as complete.
-            task_num = int(input("Enter the number of the task you want to mark as complete\n: "))
+            task_num = int(get_input("Enter the number of the task you want to mark as complete"))
+
+            if not task_num: return
+
             task_index = task_num - 1#Subtracting 1 from the task number since the list index starts from 0.
-            success = Mark_Task_Complete(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
+            success = Mark_Complete_Para(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
 
             if success == True:#This if is for if the task is successfully marked as complete.
                 print("Your task has been marked as complete.")
@@ -150,8 +206,10 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
 
         except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
             print("Invalid input. Please enter a number.\n") 
+        except TypeError:
+            return
 
-def Mark_Task_Complete(category, comp_task):#This function is for users to mark a task as complete in their To-Do list by category and task index.
+def Mark_Complete_Para(category, comp_task):#This function is for users to mark a task as complete in their To-Do list by category and task index.
     if 0 <= comp_task < len(tasks[category]):#This if checks if the task index is valid for the given category.
         if "(Complete)" in tasks[category][comp_task]:#This if checks if the task is already marked as complete.
             return "already_complete"
@@ -170,35 +228,12 @@ while True:#This while loop is for the main menu. It will keep running until use
         print("\n")#This print function creates a blank line that might help clear reading for users.
         print("[1: View Lists, 2: Add Task, 3: Remove a List, 4: Mark Complete, 5: Exit]")#This line is main menu options. Users will choose their option from the list.
         #This line asks users to enter their option by number.
-        user_input = int(input("Please choose your option from the list above by a number \n: "))
+        user_input = int(input("Please choose your option from the list above by a number\n:"))
         if user_input in options:
             if user_input == 1:#This if is for View Lists.
                 View_Lists()
             elif user_input == 2:#This elif is for Add Task.
-                View_Lists()
-        
-                category = input("Enter a category (e.g. work, personal)\n: ").strip().lower()
-                if category == "":#This if statement is for if category is empty or just spaces.
-                    print("Category cannot be empty or just spaces. Please try again.")
-                    continue
-
-                #This while loop is for if the category is valid, it will keep asking users to enter a task until they enter a valid task that can be added to the list.
-                while True:
-                    new_task = input("Enter a task you want to add: ").strip().lower()
-                    if new_task == "":
-                        print("Your task cannot be empty or just spaces. Please try again.")
-                        continue
-
-                    success = Add_Task(category, new_task)#This line calls the Add_Task function with parameters.
-                    if success == True:
-                        print(f"Your task '{new_task}' has been added to [{category}].")#This line is for if the task is successfully added to the list.
-                        View_Lists()
-                        break
-                    else:#This else is for if the task already exists in the same category.
-                        print(f"!Your task '{new_task}' already exists in [{category}]!\nPlease try again.")
-                        
-                        
-                    
+                Add_Task()
             elif user_input == 3:#This elif is for Remove List.
                 Remove_List()
             elif user_input == 4:#This elif is for Mark Complete.
