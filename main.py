@@ -27,7 +27,7 @@ def get_input(question):
         user_input = input(f"{question} (or '0' to go back)\n:").strip().lower()
         if user_input in ["0", "'0'"]:
             return None
-
+ 
         if user_input == "":#This if prevents blank input.
             print("Input cannot be blank. Please try again.")
             continue
@@ -37,17 +37,30 @@ def get_input(question):
 
 def View_Lists():#This function is for users to view thier current To-Do list.
                  #It will automatically display the current list after users add, remove, or mark complete a task. 
-    print("---Current To-Do List---")
+    print("\n" + "-" * 21)
+    print(" Current To-Do List  ")
+    print("-" * 21)
     if not tasks:
-        print("Your list is empty.")
-    else:#This for is for printing the category and tasks in the list.
+        print("(Your list is empty!)")
+    else:
+
         for category, task_list in tasks.items():
-            print(f"[{category.lower()}]")
-            for task in task_list:
-                print(f"{task}")
+            print(f"[ {category.upper()} ]") # Prints category name in uppercase
+            
+            if not task_list:
+                print("(No tasks in this category)")
+            else:
+                #Loop through the list of tasks inside that category
+                for task in task_list:
+                    print(f" • {task}")
+    print("-" * 21)
+
 
 
 def Add_Task():
+    print("=" * 21)
+    print("    | Add Task | ")
+  
     while True:
         View_Lists()
             
@@ -71,7 +84,6 @@ def Add_Task():
 
 
 def Add_Task_Para(category, new_task):#This function is for users to add a task to thier To-Do list.
-    print("Add Task.")
     #This if statement is for if the category doesn't exist, it will create a new category.
     if category not in tasks:
         tasks[category] = []     
@@ -84,7 +96,9 @@ def Add_Task_Para(category, new_task):#This function is for users to add a task 
 
 
 def Remove_List():#This function is for users to remove a task from thier To-Do list.
-    print("Remove a List.")
+    print("=" * 21)
+    print("   | Remove List | ")
+  
     while True:      
         try:
                 
@@ -124,20 +138,21 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                     print(f"{i + 1}: {task}")
 
                 #This line asks users to enter the number of the task.
-                task_num = int(get_input("Enter the number of the task you want to remove."))
+                while True:
+                    task_num = int(get_input("Enter the number of the task you want to remove."))
 
-                if not task_num: return
+                    if not task_num: return
 
-                task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
-                success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
+                    task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
+                    success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
 
-                if success == True:#This if is for if the task is successfully removed.
-                    print("Your task has been removed.")
-                    View_Lists()
-                    break
-                else:#This else is for if the task number is invalid.
-                    print("Invalid task number. Please try again.\n")
-                
+                    if success == True:#This if is for if the task is successfully removed.
+                        print("Your task has been removed.")
+                        View_Lists()
+                        break
+                    else:#This else is for if the task number is invalid.
+                        print("Invalid task number. Please try again.\n")
+                    
             elif del_ask == 3:#This elif statement is for users to clear all lists.
                 try:
                     del_confirm = int(input("Are you sure you want to delete all of the tasks?\n Yes:1 No:0\n:"))
@@ -180,7 +195,9 @@ def Remove_Task(category, task_index):#This function is for users to remove a ta
 
         
 def Mark_Complete():#This function is for users to mark a task as complete in their To-Do list.
-    print("Mark Complete.")
+    print("=" * 21)
+    print("  | Mark Complete | ")
+  
     while True:      
         try:
 
@@ -199,24 +216,25 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
                 print(f"{i + 1}: {task}")
 
             #This line asks users to enter the number of the task they want to mark as complete.
-            task_num = int(get_input("Enter the number of the task you want to mark as complete"))
+            while True:
+                task_num = int(get_input("Enter the number of the task you want to mark as complete"))
 
-            if not task_num: return
+                if not task_num: return
 
-            task_index = task_num - 1#Subtracting 1 from the task number since the list index starts from 0.
-            success = Mark_Complete_Para(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
+                task_index = task_num - 1#Subtracting 1 from the task number since the list index starts from 0.
+                success = Mark_Complete_Para(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
 
-            if success == True:#This if is for if the task is successfully marked as complete.
-                print("Your task has been marked as complete.")
-                View_Lists()
-                break
+                if success == True:#This if is for if the task is successfully marked as complete.
+                    print("Your task has been marked as complete.")
+                    View_Lists()
+                    break
 
-            elif success == "already_complete":#This elif is for if the task is already marked as complete.
-                print("Your task is already marked as complete. Please try again.\n")
+                elif success == "already_complete":#This elif is for if the task is already marked as complete.
+                    print("Your task is already marked as complete. Please try again.\n")
 
-            else:#This else is for if the task number is invalid.
-                print("Invalid task number. Please try again.\n")
-                
+                else:#This else is for if the task number is invalid.
+                    print("Invalid task number. Please try again.\n")
+                    
         except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
             print("Invalid input. Please enter a number.") 
         except TypeError:
@@ -238,10 +256,19 @@ def Mark_Complete_Para(category, comp_task):#This function is for users to mark 
 options = [1,2,3,4,5] 
 while True:#This while loop is for the main menu. It will keep running until users choose to exit the program by entering 5.
     try:#This try-except block prevents the program from crashing when users enter invalid input.
-        print("\n")#This print function creates a blank line that might help clear reading for users.
-        print("[1: View Lists, 2: Add Task, 3: Remove a List, 4: Mark Complete, 5: Exit]")#This line is main menu options. Users will choose their option from the list.
+        #This print function creates a blank line that might help clear reading for users.
+        #This line is main menu options. Users will choose their option from the list.
+        print("\n" + "=" * 44)
+        print("                 MAIN MENU                  ")
+        print("=" * 44)
+        print("  1. View Current Lists")
+        print("  2. Add a New Task")
+        print("  3. Remove a Task or List")
+        print("  4. Mark a Task as Complete")
+        print("  5. Save and Exit")
+        print("=" * 44)
         #This line asks users to enter their option by number.
-        user_input = int(input("Please choose your option from the list above by a number\n:"))
+        user_input = int(input("Please choose your option (1-5):"))
         if user_input in options:
             if user_input == 1:#This if is for View Lists.
                 View_Lists()
@@ -253,7 +280,7 @@ while True:#This while loop is for the main menu. It will keep running until use
                 Mark_Complete()
             elif user_input == 5:#This elif is for Exit.
                 save_tasks()
-                print("Goodbye.")
+                print("See you next time.")
                 break
         else:
             print("Your option isn't available. Please try again.")
