@@ -22,10 +22,10 @@ def load_tasks():#This function deserialize the dictionary.
         
 load_tasks()#This calls the load_tasks function to load from the saved_tasks.json file.
 
-def get_input(question):
+def get_input(question):  
     while True:
         user_input = input(f"{question} (or '0' to go back)\n:").strip().lower()
-        if user_input == "0":
+        if user_input in ["0", "'0'"]:
             return None
 
         if user_input == "":#This if prevents blank input.
@@ -65,7 +65,7 @@ def Add_Task():
             if success == True:
                 print(f"Your task '{new_task}' has been added to [{category}].")#This line is for if the task is successfully added to the list.
                 View_Lists()
-                break
+                return
             else:#This else is for if the task already exists in the same category.
                 print(f"!Your task '{new_task}' already exists in [{category}]!\nPlease try again.")
 
@@ -86,8 +86,8 @@ def Add_Task_Para(category, new_task):#This function is for users to add a task 
 def Remove_List():#This function is for users to remove a task from thier To-Do list.
     print("Remove a List.")
     while True:      
-        try:#This try-except block prevents the program from crashing when users enter invalid input.
-            #This line asks remove options for users.
+        try:
+                
             del_ask = int(get_input("Do you want to remove a category or a task? Or clear all lists? Enter by 1, 2, or 3. \n[1: Category, 2: Task, 3: Clear All Lists]"))
 
             if not del_ask: return
@@ -103,10 +103,11 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                 if success == True:#This if is for if the category is successfully removed.
                     print(f"Your category [{category_name}] has been removed.")
                     View_Lists()
+                    break
                 else:#This else is for if the category doesn't exist.
                     print(f"Your category [{category_name}] doesn't exist. Please try again.\n")
                     continue
-    
+
             elif del_ask == 2:#This elif statement is for users to remove a task from the list.
                 View_Lists()
                 #This line asks users to enter the category of the task.
@@ -133,20 +134,31 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                 if success == True:#This if is for if the task is successfully removed.
                     print("Your task has been removed.")
                     View_Lists()
+                    break
                 else:#This else is for if the task number is invalid.
                     print("Invalid task number. Please try again.\n")
-                break
+                
             elif del_ask == 3:#This elif statement is for users to clear all lists.
-                tasks.clear()
-                print("All your lists have been cleared.")
-                break
+                try:
+                    del_confirm = int(input("Are you sure you want to delete all of the tasks?\n Yes:1 No:0\n:"))
+
+                    if not del_confirm: return
+
+                    elif del_confirm == 1:
+                        tasks.clear()
+                        print("All your lists have been cleared.")
+                        break
+                    
+                except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
+                    print("Invalid input. Please enter a number.") 
             else:
                 print("Your option isn't available. Please try again.")
+
         except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
-            print("Invalid input. Please enter a number.\n")
+            print("Invalid input. Please enter a number.") 
         except TypeError:
-            return
-        
+            return     
+
 
 
 
@@ -170,7 +182,8 @@ def Remove_Task(category, task_index):#This function is for users to remove a ta
 def Mark_Complete():#This function is for users to mark a task as complete in their To-Do list.
     print("Mark Complete.")
     while True:      
-        try:#This try-except block prevents the program from crashing when users enter invalid input.
+        try:
+
             View_Lists()
             #This line asks users to enter the category of the task.
             category = get_input("Enter the category of the task you want to mark as complete.")
@@ -196,16 +209,16 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
             if success == True:#This if is for if the task is successfully marked as complete.
                 print("Your task has been marked as complete.")
                 View_Lists()
+                break
 
             elif success == "already_complete":#This elif is for if the task is already marked as complete.
                 print("Your task is already marked as complete. Please try again.\n")
 
             else:#This else is for if the task number is invalid.
                 print("Invalid task number. Please try again.\n")
-            break
-
+                
         except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
-            print("Invalid input. Please enter a number.\n") 
+            print("Invalid input. Please enter a number.") 
         except TypeError:
             return
 
