@@ -4,9 +4,14 @@ print("Welcome to a New To-do list!\n")
 tasks = {}#This is an empty dictionary that will be used to store the tasks that users add to their to-do list.
 
 def save_tasks():#This function serialize the dictionary.
-    with open("saved_tasks.json", "w") as f:
-        print("Saving your tasks...")
-        json.dump(tasks, f)
+    try:
+        with open("saved_tasks.json", "w") as f:
+            print("Saving your tasks...")
+            print("See you next time.")
+            json.dump(tasks, f)
+    except PermissionError:
+        print("\nERROR!! Saving failed due to insufficient file permissions.")
+        print("Please check your folder permissions and try again.")
 
 def load_tasks():#This function deserialize the dictionary.
     try:#This try-except block would create a new To-Do list if there is no saved_tasks.json file.
@@ -98,81 +103,87 @@ def Add_Task_Para(category, new_task):#This function is for users to add a task 
 def Remove_List():#This function is for users to remove a task from thier To-Do list.
     print("=" * 21)
     print("   | Remove List | ")
-  
-    while True:      
-        try:
-                
-            del_ask = int(get_input("Do you want to remove a category or a task? Or clear all lists? Enter by 1, 2, or 3. \n[1: Category, 2: Task, 3: Clear All Lists]"))
+    if not tasks:
+        View_Lists()
+        print("You need to add something to remove a task or list.")
+        print("-" * 51)
+        print("\nReturning to main menu...")
 
-            if not del_ask: return
+    else:
+        while True:      
+            try:
+                    
+                del_ask = int(get_input("Do you want to remove a category or a task? Or clear all lists? Enter by 1, 2, or 3. \n[1: Category, 2: Task, 3: Clear All Lists]"))
 
-            if del_ask == 1:#This if statement is for users to remove a category from the list.
-                View_Lists()
-                #This line asks users to enter the name of the category.
-                category_name = get_input("Enter the category you want to remove.")
+                if not del_ask: return
 
-                if not category_name: return
-
-                success = Remove_Category(category_name)#This line calls the Remove_Category function and receives boolean.
-                if success == True:#This if is for if the category is successfully removed.
-                    print(f"Your category [{category_name}] has been removed.")
+                if del_ask == 1:#This if statement is for users to remove a category from the list.
                     View_Lists()
-                    break
-                else:#This else is for if the category doesn't exist.
-                    print(f"Your category [{category_name}] doesn't exist. Please try again.\n")
-                    continue
+                    #This line asks users to enter the name of the category.
+                    category_name = get_input("Enter the category you want to remove.")
 
-            elif del_ask == 2:#This elif statement is for users to remove a task from the list.
-                View_Lists()
-                #This line asks users to enter the category of the task.
-                category = get_input("Enter the category of the task you want to remove.")
+                    if not category_name: return
 
-                if not category: return
-
-                if category not in tasks:
-                    print(f"Your category [{category}] doesn't exist. Please try again.")
-                    continue
-
-                #This for loop allows users to select a task by number.
-                for i, task in enumerate(tasks[category]):
-                    print(f"{i + 1}: {task}")
-
-                #This line asks users to enter the number of the task.
-                while True:
-                    task_num = int(get_input("Enter the number of the task you want to remove."))
-
-                    if not task_num: return
-
-                    task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
-                    success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
-
-                    if success == True:#This if is for if the task is successfully removed.
-                        print("Your task has been removed.")
+                    success = Remove_Category(category_name)#This line calls the Remove_Category function and receives boolean.
+                    if success == True:#This if is for if the category is successfully removed.
+                        print(f"Your category [{category_name}] has been removed.")
                         View_Lists()
                         break
-                    else:#This else is for if the task number is invalid.
-                        print("Invalid task number. Please try again.\n")
-                    
-            elif del_ask == 3:#This elif statement is for users to clear all lists.
-                try:
-                    del_confirm = int(input("Are you sure you want to delete all of the tasks?\n Yes:1 No:0\n:"))
+                    else:#This else is for if the category doesn't exist.
+                        print(f"Your category [{category_name}] doesn't exist. Please try again.\n")
+                        continue
 
-                    if not del_confirm: return
+                elif del_ask == 2:#This elif statement is for users to remove a task from the list.
+                    View_Lists()
+                    #This line asks users to enter the category of the task.
+                    category = get_input("Enter the category of the task you want to remove.")
 
-                    elif del_confirm == 1:
-                        tasks.clear()
-                        print("All your lists have been cleared.")
-                        break
-                    
-                except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
-                    print("Invalid input. Please enter a number.") 
-            else:
-                print("Your option isn't available. Please try again.")
+                    if not category: return
 
-        except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
-            print("Invalid input. Please enter a number.") 
-        except TypeError:
-            return     
+                    if category not in tasks:
+                        print(f"Your category [{category}] doesn't exist. Please try again.")
+                        continue
+
+                    #This for loop allows users to select a task by number.
+                    for i, task in enumerate(tasks[category]):
+                        print(f"{i + 1}: {task}")
+
+                    #This line asks users to enter the number of the task.
+                    while True:
+                        task_num = int(get_input("Enter the number of the task you want to remove."))
+
+                        if not task_num: return
+
+                        task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
+                        success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
+
+                        if success == True:#This if is for if the task is successfully removed.
+                            print("Your task has been removed.")
+                            View_Lists()
+                            break
+                        else:#This else is for if the task number is invalid.
+                            print("Invalid task number. Please try again.\n")
+                        
+                elif del_ask == 3:#This elif statement is for users to clear all lists.
+                    try:
+                        del_confirm = int(input("Are you sure you want to delete all of the tasks?\n Yes:1 No:0\n:"))
+
+                        if not del_confirm: return
+
+                        elif del_confirm == 1:
+                            tasks.clear()
+                            print("All your lists have been cleared.")
+                            break
+                        
+                    except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
+                        print("Invalid input. Please enter a number.") 
+                else:
+                    print("Your option isn't available. Please try again.")
+
+            except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
+                print("Invalid input. Please enter a number.") 
+            except TypeError:
+                return     
 
 
 
@@ -280,7 +291,6 @@ while True:#This while loop is for the main menu. It will keep running until use
                 Mark_Complete()
             elif user_input == 5:#This elif is for Exit.
                 save_tasks()
-                print("See you next time.")
                 break
         else:
             print("Your option isn't available. Please try again.")
