@@ -1,4 +1,5 @@
 import json #Importing the json module to save and load the tasks in a JSON file. 
+import introduction as intro
 print("\n" + "=" * 26)
 print(" Welcome to Yojana To-Do!")
 print("=" * 26)
@@ -277,6 +278,7 @@ while True:#This while loop is for the main menu. It will keep running until use
         print("\n" + "=" * 44)
         print("                 MAIN MENU                  ")
         print("=" * 44)
+        print("  0. Help")
         print("  1. View Current Lists")
         print("  2. Add a New Task")
         print("  3. Remove a Task or List")
@@ -286,7 +288,9 @@ while True:#This while loop is for the main menu. It will keep running until use
         #This line asks users to enter their option by number.
         user_input = int(input("Please choose your option (1-5):"))
         if user_input in options:
-            if user_input == 1:#This if is for View Lists.
+            if user_input == 0:
+                intro.show_help()
+            elif user_input == 1:#This if is for View Lists.
                 View_Lists()
             elif user_input == 2:#This elif is for Add Task.
                 Add_Task()
