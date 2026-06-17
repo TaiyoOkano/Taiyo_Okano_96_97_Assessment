@@ -1,3 +1,6 @@
+'''
+ PLEASE RUN THIS PYTHON FILE  
+'''
 import json #Importing the json module to save and load the tasks in a JSON file. 
 import introduction as intro
 print("\n" + "=" * 26)
@@ -270,7 +273,7 @@ def Mark_Complete_Para(category, comp_task):#This function is for users to mark 
     else:#This else is for if the task index is invalid.
         return False
 
-options = [1,2,3,4,5] 
+options = [0,1,2,3,4,5] 
 while True:#This while loop is for the main menu. It will keep running until users choose to exit the program by entering 5.
     try:#This try-except block prevents the program from crashing when users enter invalid input.
         #This print function creates a blank line that might help clear reading for users.
@@ -278,7 +281,7 @@ while True:#This while loop is for the main menu. It will keep running until use
         print("\n" + "=" * 44)
         print("                 MAIN MENU                  ")
         print("=" * 44)
-        print("  0. Help")
+        print("  0. Introduction to Yojana To-Do")
         print("  1. View Current Lists")
         print("  2. Add a New Task")
         print("  3. Remove a Task or List")
