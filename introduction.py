@@ -1,3 +1,6 @@
+'''
+ PLEASE DO NOT RUN THIS PYTHON FILE
+'''
 def show_help():
     print("\n" + "~" * 55)
     print("        WELCOME TO YOJANA TO-DO HELP & INTRO")

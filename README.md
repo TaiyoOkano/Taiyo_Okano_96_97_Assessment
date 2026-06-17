@@ -9,7 +9,7 @@ To run this application, you will need an appropriate code editor(e.g. VS Code) 
 
 Please make sure you have installed Python on your system.
 
-When you run this app, please select "main.py" file.
+When you run this app, PLEASE select "main.py" file.
 
 : Features
 - Create and organize tasks by category.
