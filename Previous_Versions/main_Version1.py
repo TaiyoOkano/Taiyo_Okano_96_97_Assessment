@@ -1,3 +1,6 @@
+'''
+ PLEASE DELETE THE CURRENT JSON FILE BEFORE AND AFTER RUNNING THIS VERSION.
+'''
 import json
 print("Welcome to a New To-do list!\n")
 

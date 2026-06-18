@@ -1,5 +1,5 @@
 '''
- PLEASE DO NOT RUN THIS PYTHON FILE
+ Please do NOT run this Python file
 '''
 def show_help():
     print("\n" + "~" * 55)
@@ -16,6 +16,23 @@ def show_help():
     print("                                You can delete all lists as you wish.")
     print("  4. Mark a Task as Complete -> Tick off a task with (Complete) mark.")
     print("  5. Save and Exit           -> Safely saves everything to your computer.")
+
+    eg_tasks = {
+        "work": ["homework","house cleaning"],
+      
+       
+    }
+    
+
+    print("\n HERE IS WHAT YOUR TO-DO LIST LOOKS LIKE:")
+    print("-" * 21)
+    print(" Current To-Do List  ")
+    print("-" * 21)
+    for category, task_list in eg_tasks.items():
+        print(f"[ {category.upper()} ]")
+        for task in task_list:
+            print(f" : {task}")
+    print("-" * 21)
 
     print("\n  TIPS:")
     print("  - You can type '0' at anytime to cancel and run back to the Main Menu.")
