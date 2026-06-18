@@ -38,6 +38,7 @@ def get_input(question):
 
         if user_input == "":#This if prevents blank input.
             print("[Invalid]\nInput cannot be blank. Please try again.")
+            View_Lists()
             continue
 
         return user_input
@@ -118,7 +119,7 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
     else:
         while True:      
             try:
-                    
+                View_Lists()
                 del_ask = int(get_input("Please choose your option below. \n 1: Remove a Category\n 2: Remove a Task\n 3: Clear All Lists"))
 
                 if not del_ask: return
