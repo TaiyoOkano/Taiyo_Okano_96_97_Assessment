@@ -1,8 +1,11 @@
 '''
  PLEASE RUN THIS PYTHON FILE  
 '''
+import constants as con
 import options as op
 import introduction as intro
+
+
 print("\n" + "=" * 26)
 print(" Welcome to Yojana To-Do!")
 print("=" * 26)
@@ -10,8 +13,6 @@ print("=" * 26)
 
 op.load_tasks()#This calls the load_tasks function to load from the saved_tasks.json file.
 
-
-options = [0,1,2,3,4,5] 
 while True:#This while loop is for the main menu. It will keep running until users choose to exit the program by entering 5.
     try:#This try-except block prevents the program from crashing when users enter invalid input.
         #This print function creates a blank line that might help clear reading for users.
@@ -28,25 +29,25 @@ while True:#This while loop is for the main menu. It will keep running until use
         print("=" * 44)
         #This line asks users to enter their option by number.
         user_input = int(input("Please choose your option (1-5):"))
-        if user_input in options:
-            if user_input == 0:
+        if user_input in con.OPTIONS:
+            if user_input == con.MENU_INTRO:#This if is for introduction.
                 intro.show_help()
                 input("-Press enter to continue-\n")
-            elif user_input == 1:#This if is for View Lists.
+            elif user_input == con.MENU_VIEW:#This if is for View Lists.
                 op.View_Lists()
                 input("-Press enter to continue-\n")
-            elif user_input == 2:#This elif is for Add Task.
+            elif user_input == con.MENU_ADD:#This elif is for Add Task.
                 op.Add_Task()
-            elif user_input == 3:#This elif is for Remove List.
+            elif user_input == con.MENU_REMOVE:#This elif is for Remove List.
                 op.Remove_List()
-            elif user_input == 4:#This elif is for Mark Complete.
+            elif user_input == con.MENU_MARK:#This elif is for Mark Complete.
                 op.Mark_Complete()
-            elif user_input == 5:#This elif is for Exit.
+            elif user_input == con.MENU_EXIT:#This elif is for Exit.
                 op.save_tasks()
                 break
         else:
-            print("[Invalid]\nYour option isn't available. Please try again.")
+            print(con.INV_OPTION)
     except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
-        print("[Invalid]\nPlease enter a number.\n")
+        print(con.INV_NOT_A_NUMBER)
     except EOFError:#This except block prevents the program from EOFError(e.g. Ctrl+D or Ctrl+Z).
-        print("[Invalid]\nYour option isn't available. Please try again.")
+        print(con.INV_OPTION)
