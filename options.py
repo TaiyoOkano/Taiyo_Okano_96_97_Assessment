@@ -37,7 +37,12 @@ def get_input_for_enumerate(category, question):
             #This for loop allows users to select a task by number.
             print(f"\nTasks in [ {category.upper()} ]:")
             for i, task in enumerate(tasks[category]):
-                print(f" {i + 1}: {task}")
+                if con.COMPLETE_MARKER in task:
+                    clean_task = task.replace(con.COMPLETE_MARKER, "")
+                    print(f" {i + 1}: [✓] {clean_task}")
+                else:
+                    print(f" {i + 1}: {task}")
+
 
             user_input = input(f"\n{question} (or '0' to go back)\n:").strip()
 
@@ -87,9 +92,14 @@ def view_lists():#This function is for users to view thier current To-Do list.
             if not task_list:
                 print("(No tasks in this category)")
             else:
-                #Loop through the list of tasks inside that category
+               
                 for task in task_list:
-                    print(f" : {task}")
+                    if con.COMPLETE_MARKER in task:
+                        clean_task = task.replace(con.COMPLETE_MARKER, "")
+                        print(f" : [✓] {clean_task}")
+
+                    else:#Loop through the list of tasks inside that category
+                        print(f" : {task}")
     print("-" * 21)
 
 
@@ -113,12 +123,13 @@ def add_task():
 
                 success = add_task_para(category, new_task)#This line calls the Add_Task function with parameters.
                 if success == True:
-                    print(f"Your task '{new_task}' has been added to [{category}].")#This line is for if the task is successfully added to the list.
+                    print(f"Your task '{new_task}' has been added to [ {category.upper()} ].")#This line is for if the task is successfully added to the list.
                     view_lists()
                     input(con.CONTINUE)
                     return
+                
                 else:#This else is for if the task already exists in the same category.
-                    print(f"[Invalid]\nYour task '{new_task}' already exists in [{category}]!\nPlease try again.")
+                    print(f"[Invalid]\nYour task '{new_task}' already exists in [ {category.upper()} ]!\nPlease try again.")
         except EOFError:#This except block prevents the program from EOFError(e.g. Ctrl+D or Ctrl+Z).
             print(con.INV_OPTION)
 
@@ -129,6 +140,9 @@ def add_task_para(category, new_task):#This function is for users to add a task 
         tasks[category] = []     
     #This if statement prevents users from adding a task that already exists in the same category.
     if new_task in tasks[category]:
+        return False
+    #This if statement prevents users from adding a task that is already marked as complete in the same category. 
+    if new_task + con.COMPLETE_MARKER in tasks[category]:
         return False
     else:#This else adds the new task to the category.
         tasks[category].append(new_task)
