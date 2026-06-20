@@ -33,6 +33,8 @@ def show_help():
         for task in task_list:
             print(f" : {task}")
     print("-" * 21)
+    print("\n[ WORK ] -> This is category.")
+    print(": homework\n: house cleaning -> These two are tasks.")
 
     print("\n  TIPS:")
     print("  - You can type '0' at anytime to cancel and run back to the Main Menu.")

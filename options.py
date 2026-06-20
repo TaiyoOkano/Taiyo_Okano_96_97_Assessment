@@ -28,6 +28,31 @@ def load_tasks():#This function deserialize the dictionary.
     except FileNotFoundError:#This except block prevents the program from crashing when there is no saved_tasks.json file.
         print("No saved tasks found. Start with a new To-Do list.")
         
+def get_input_for_enumerate(category, question):
+    while True:
+        try:
+            #This for loop allows users to select a task by number.
+            print(f"\nTasks in [ {category.upper()} ]:")
+            for i, task in enumerate(tasks[category]):
+                print(f" {i + 1}: {task}")
+
+            user_input = input(f"\n{question} (or '0' to go back)\n:").strip()
+
+            if user_input == "0":#Goes back to main menu.
+                return None
+            
+            if user_input == "":#This if prevents blank input.
+                print("[Invalid]\nInput cannot be blank. Please try again.")
+                continue
+
+            task_num = int(user_input)
+            if 1 <= task_num <= len(tasks[category]):
+                return task_num
+            else:
+                print("[Invalid]\nTask number is out of range. Please try again.")
+        except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
+            print("[Invalid]\nPlease enter a valid number.")
+
 
 def get_input(question):  
 
@@ -128,6 +153,7 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                     View_Lists()
                     #This line asks users to enter the name of the category.
                     while True:
+                        View_Lists()
                         category_name = get_input("Enter the category you want to remove.")
 
                         if not category_name: return
@@ -143,9 +169,9 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                         continue
 
                 elif del_ask == 2:#This elif statement is for users to remove a task from the list.
-                    View_Lists()
                     #This line asks users to enter the category of the task.
                     while True:
+                        View_Lists()
                         category = get_input("Enter the category of the task you want to remove.")
 
                         if not category: return
@@ -153,31 +179,23 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                         if category not in tasks:
                             print(f"[Invalid]\nYour category [{category}] doesn't exist. Please try again.")
                             continue
+                        
+                                                        
+                        task_num = get_input_for_enumerate(category, "Enter the number of the task you want to remove.")
 
-                        #This for loop allows users to select a task by number.
-                        for i, task in enumerate(tasks[category]):
-                            print(f"{i + 1}: {task}")
+                        if not task_num: return
 
-                        #This line asks users to enter the number of the task.
-                        while True:
-                            try:
-                                task_num = int(get_input("Enter the number of the task you want to remove."))
+                        task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
+                        success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
 
-                                if not task_num: return
-
-                                task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
-                                success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
-
-                                if success == True:#This if is for if the task is successfully removed.
-                                    print("Your task has been removed.")
-                                    View_Lists()
-                                    input("-Press enter to continue-\n")
-                                    return
-                                else:#This else is for if the task number is invalid.
-                                    print("[Invalid]\nInvalid task number. Please try again.\n")
-                            except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
-                                print("[Invalid]\nPlease enter a number.") 
-                            
+                        if success == True:#This if is for if the task is successfully removed.
+                            print("Your task has been removed.")
+                            View_Lists()
+                            input("-Press enter to continue-\n")
+                            return
+                        else:#This else is for if the task number is invalid.
+                            print("[Invalid]\nTask number is out of range. Please try again.\n")
+                    
                 elif del_ask == 3:#This elif statement is for users to clear all lists.
                     while True:
                         try:
@@ -215,12 +233,15 @@ def Remove_Category(category_name):#This function is for users to remove a categ
         return False
 
 def Remove_Task(category, task_index):#This function is for users to remove a task from their To-Do list by category and task index.
+
     if 0 <= task_index < len(tasks[category]):#This if checks if the task index is valid for the given category.
         del tasks[category][task_index]
         return True
         
     else:#This else is for if the task index is invalid.
         return False
+    
+    
 
         
 def Mark_Complete():#This function is for users to mark a task as complete in their To-Do list.
@@ -239,34 +260,23 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
                 print(f"[Invalid]\nYour category [{category}] doesn't exist. Please try again.")
                 continue
 
-            #This for loop allows users to select a task by number.
-            for i, task in enumerate(tasks[category]):
-                print(f"{i + 1}: {task}")
+            task_num = get_input_for_enumerate(category, "Enter the number of the task you want to remove.")
 
-            #This line asks users to enter the number of the task they want to mark as complete.
-            while True:
-                try:
-                    task_num = int(get_input("Enter the number of the task you want to mark as complete"))
+            if not task_num: return
 
-                    if not task_num: return
+            task_index = task_num - 1#Subtracting 1 from the task number since the list index starts from 0.
+            success = Mark_Complete_Para(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
 
-                    task_index = task_num - 1#Subtracting 1 from the task number since the list index starts from 0.
-                    success = Mark_Complete_Para(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
+            if success == True:#This if is for if the task is successfully marked as complete.
+                print("Your task has been marked as complete.")
+                View_Lists()
+                input("-Press enter to continue-\n")
+                return
 
-                    if success == True:#This if is for if the task is successfully marked as complete.
-                        print("Your task has been marked as complete.")
-                        View_Lists()
-                        input("-Press enter to continue-\n")
-                        return
+            elif success == "already_complete":#This elif is for if the task is already marked as complete.
+                print("[Invalid]\nYour task is already marked as complete. Please try again.\n")
 
-                    elif success == "already_complete":#This elif is for if the task is already marked as complete.
-                        print("[Invalid]\nYour task is already marked as complete. Please try again.\n")
-
-                    else:#This else is for if the task number is invalid.
-                        print("[Invalid]\nInvalid task number. Please try again.\n")
-                except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
-                    print("[Invalid]\nPlease enter a number.") 
-                    
+       
         except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
             print("[Invalid]\nPlease enter a number.") 
         except TypeError:
