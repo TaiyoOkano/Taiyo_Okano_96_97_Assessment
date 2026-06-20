@@ -148,9 +148,12 @@ def remove_list():#This function is for users to remove a task from thier To-Do 
         while True:      
             try:
                 view_lists()
-                del_ask = int(get_input("Please choose your option below. \n 1: Remove a Category\n 2: Remove a Task\n 3: Clear All Lists"))
+                user_choice = get_input("Please choose your option below. \n 1: Remove a Category\n 2: Remove a Task\n 3: Clear All Lists")
 
-                if not del_ask: return
+                if user_choice is None:
+                    return
+                
+                del_ask = int(user_choice)
 
                 if del_ask == con.CMD_REMOVE_CATEGORY:#This if statement is for users to remove a category from the list.              
                     while True:
@@ -219,8 +222,7 @@ def remove_list():#This function is for users to remove a task from thier To-Do 
 
             except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
                 print(con.INV_NOT_A_NUMBER) 
-            except TypeError:
-                return     
+              
 
 
 def remove_category(category_name):#This function is for users to remove a category from their To-Do list.
@@ -277,8 +279,7 @@ def mark_complete():#This function is for users to mark a task as complete in th
        
         except ValueError:#This except block prevents the program from crashing when users enter invalid input that cannot be converted.
             print(con.INV_NOT_A_NUMBER) 
-        except TypeError:
-            return
+    
 
 
 def mark_complete_para(category, comp_task):#This function is for users to mark a task as complete in their To-Do list by category and task index.
