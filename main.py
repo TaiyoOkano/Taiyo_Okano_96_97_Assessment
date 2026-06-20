@@ -34,14 +34,14 @@ while True:#This while loop is for the main menu. It will keep running until use
                 intro.show_help()
                 input("-Press enter to continue-\n")
             elif user_input == con.MENU_VIEW:#This if is for View Lists.
-                op.View_Lists()
+                op.view_lists()
                 input("-Press enter to continue-\n")
             elif user_input == con.MENU_ADD:#This elif is for Add Task.
-                op.Add_Task()
+                op.add_task()
             elif user_input == con.MENU_REMOVE:#This elif is for Remove List.
-                op.Remove_List()
+                op.remove_list()
             elif user_input == con.MENU_MARK:#This elif is for Mark Complete.
-                op.Mark_Complete()
+                op.mark_complete()
             elif user_input == con.MENU_EXIT:#This elif is for Exit.
                 op.save_tasks()
                 break

@@ -66,13 +66,13 @@ def get_input(question):
 
         if user_input == "":#This if prevents blank input.
             print(con.INV_BLANK)
-            View_Lists()
+            view_lists()
             continue
 
         return user_input
 
 
-def View_Lists():#This function is for users to view thier current To-Do list.
+def view_lists():#This function is for users to view thier current To-Do list.
                  #It will automatically display the current list after users add, remove, or mark complete a task. 
     print("\n" + "-" * 21)
     print(" Current To-Do List  ")
@@ -93,13 +93,13 @@ def View_Lists():#This function is for users to view thier current To-Do list.
     print("-" * 21)
 
 
-def Add_Task():
+def add_task():
     print("=" * 26)
     print("    | Add a New Task | ")
   
     while True:
         try:
-            View_Lists()
+            view_lists()
                 
             category = get_input("Enter a category (e.g. work, personal)")
 
@@ -111,10 +111,10 @@ def Add_Task():
 
                 if not new_task: return
 
-                success = Add_Task_Para(category, new_task)#This line calls the Add_Task function with parameters.
+                success = add_task_para(category, new_task)#This line calls the Add_Task function with parameters.
                 if success == True:
                     print(f"Your task '{new_task}' has been added to [{category}].")#This line is for if the task is successfully added to the list.
-                    View_Lists()
+                    view_lists()
                     input(con.CONTINUE)
                     return
                 else:#This else is for if the task already exists in the same category.
@@ -123,7 +123,7 @@ def Add_Task():
             print(con.INV_OPTION)
 
 
-def Add_Task_Para(category, new_task):#This function is for users to add a task to thier To-Do list.
+def add_task_para(category, new_task):#This function is for users to add a task to thier To-Do list.
     #This if statement is for if the category doesn't exist, it will create a new category.
     if category not in tasks:
         tasks[category] = []     
@@ -135,11 +135,11 @@ def Add_Task_Para(category, new_task):#This function is for users to add a task 
         return True
 
 
-def Remove_List():#This function is for users to remove a task from thier To-Do list.
+def remove_list():#This function is for users to remove a task from thier To-Do list.
     print("=" * 31)
     print("   | Remove a Task or List | ")
     if not tasks:
-        View_Lists()
+        view_lists()
         print("You need to add something to remove a task or list.")
         print("-" * 51)
         print("\nReturning to main menu...")
@@ -147,24 +147,22 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
     else:
         while True:      
             try:
-                View_Lists()
+                view_lists()
                 del_ask = int(get_input("Please choose your option below. \n 1: Remove a Category\n 2: Remove a Task\n 3: Clear All Lists"))
 
                 if not del_ask: return
 
-                if del_ask == con.CMD_REMOVE_CATEGORY:#This if statement is for users to remove a category from the list.
-                    View_Lists()
-                    #This line asks users to enter the name of the category.
+                if del_ask == con.CMD_REMOVE_CATEGORY:#This if statement is for users to remove a category from the list.              
                     while True:
-                        View_Lists()
-                        category_name = get_input("Enter the category you want to remove.")
+                        view_lists()
+                        category_name = get_input("Enter the category you want to remove.")#This line asks users to enter the name of the category.
 
                         if not category_name: return
 
-                        success = Remove_Category(category_name)#This line calls the Remove_Category function and receives boolean.
+                        success = remove_category(category_name)#This line calls the Remove_Category function and receives boolean.
                         if success == True:#This if is for if the category is successfully removed.
                             print(f"Your category [{category_name}] has been removed.")
-                            View_Lists()
+                            view_lists()
                             input(con.CONTINUE)
                             return
                         else:#This else is for if the category doesn't exist.
@@ -174,7 +172,7 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                 elif del_ask == con.CMD_REMOVE_TASK:#This elif statement is for users to remove a task from the list.
                     #This line asks users to enter the category of the task.
                     while True:
-                        View_Lists()
+                        view_lists()
                         category = get_input("Enter the category of the task you want to remove.")
 
                         if not category: return
@@ -189,11 +187,11 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                         if not task_num: return
 
                         task_index = task_num - 1 #Subtracting 1 from the task number since the list index starts from 0.
-                        success = Remove_Task(category, task_index)#This line calls the Remove_Task function with parameters.
+                        success = remove_task(category, task_index)#This line calls the Remove_Task function with parameters.
 
                         if success == True:#This if is for if the task is successfully removed.
                             print("Your task has been removed.")
-                            View_Lists()
+                            view_lists()
                             input(con.CONTINUE)
                             return
                         else:#This else is for if the task number is invalid.
@@ -209,7 +207,7 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                             elif del_confirm == con.CONFIRM_YES:
                                 tasks.clear()
                                 print("All your lists have been cleared.")
-                                View_Lists()
+                                view_lists()
                                 input(con.CONTINUE)
                                 return
                             else:
@@ -225,7 +223,7 @@ def Remove_List():#This function is for users to remove a task from thier To-Do 
                 return     
 
 
-def Remove_Category(category_name):#This function is for users to remove a category from their To-Do list.
+def remove_category(category_name):#This function is for users to remove a category from their To-Do list.
     if category_name in tasks:#This if checks if the category exists in the tasks dictionary.
         del tasks[category_name]
         return True
@@ -234,7 +232,7 @@ def Remove_Category(category_name):#This function is for users to remove a categ
         return False
 
 
-def Remove_Task(category, task_index):#This function is for users to remove a task from their To-Do list by category and task index.
+def remove_task(category, task_index):#This function is for users to remove a task from their To-Do list by category and task index.
 
     if 0 <= task_index < len(tasks[category]):#This if checks if the task index is valid for the given category.
         del tasks[category][task_index]
@@ -244,13 +242,13 @@ def Remove_Task(category, task_index):#This function is for users to remove a ta
         return False
 
 
-def Mark_Complete():#This function is for users to mark a task as complete in their To-Do list.
+def mark_complete():#This function is for users to mark a task as complete in their To-Do list.
     print("=" * 31)
     print("  | Mark a Task as Complete | ")
   
     while True:      
         try:
-            View_Lists()
+            view_lists()
             #This line asks users to enter the category of the task.
             category = get_input("Enter the category of the task you want to mark as complete.")
 
@@ -265,11 +263,11 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
             if not task_num: return
 
             task_index = task_num - 1#Subtracting 1 from the task number since the list index starts from 0.
-            success = Mark_Complete_Para(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
+            success = mark_complete_para(category, task_index)#This line calls the Mark_Task_Complete function with parameters.
 
             if success == True:#This if is for if the task is successfully marked as complete.
                 print("Your task has been marked as complete.")
-                View_Lists()
+                view_lists()
                 input(con.CONTINUE)
                 return
 
@@ -283,7 +281,7 @@ def Mark_Complete():#This function is for users to mark a task as complete in th
             return
 
 
-def Mark_Complete_Para(category, comp_task):#This function is for users to mark a task as complete in their To-Do list by category and task index.
+def mark_complete_para(category, comp_task):#This function is for users to mark a task as complete in their To-Do list by category and task index.
     if 0 <= comp_task < len(tasks[category]):#This if checks if the task index is valid for the given category.
         if con.COMPLETE_MARKER in tasks[category][comp_task]:#This if checks if the task is already marked as complete.
             return con.ALREADY_COMPLETE
