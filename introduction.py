@@ -4,7 +4,7 @@
 #Introduction for Yojana To-Do.
 def show_help():
     print("\n" + "~" * 55)
-    print("        Help & Introduction")
+    print("                  Help & Introduction")
     print(" Hello! Welcome to your new productivity hub.")
     print("Yojana To-Do is designed to keep your tasks organized")
     print("neatly into separate categories (e.g. 'work', etc.).")
