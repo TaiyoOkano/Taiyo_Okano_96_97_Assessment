@@ -27,7 +27,7 @@ CONTINUE = "-Press enter to continue-\n"
 #Invalid cases
 INV_NOT_A_NUMBER = "[Invalid]\nPlease enter a valid number."
 INV_OPTION = "[Invalid]\nYour option isn't available. Please try again."
-INV_OUT_OF_RAGE = "[Invalid]\nTask number is out of range. Please try again."
+INV_OUT_OF_RANGE = "[Invalid]\nTask number is out of range. Please try again."
 INV_BLANK = "[Invalid]\nInput cannot be blank. Please try again."
 
 
